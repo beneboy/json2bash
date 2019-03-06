@@ -27,7 +27,7 @@ For example:
 ```
 
 ```bash
-./json2shell test.json
+$ ./json2shell test.json
 username=foo
 extra_vars_foo=bar
 extra_vars_baz=bax
@@ -39,6 +39,7 @@ list_of_things_3=true
 list_of_things_4=false
 autologout=false
 password=bar
+$
 ```
 - dictionaries are printed as key/value pairs
 - list items are printed with their main key then underscore then the their index
@@ -52,7 +53,6 @@ You can use `eval` combined with `$()` to evaluate this script's output.
 ```bash
 $ cat test.bash
 #!/bin/bash
-
 eval $(./json2shell test.json)
 echo ${list_of_things_2_sub_dict}
 $ ./test.bash  
