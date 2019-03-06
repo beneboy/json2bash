@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
+import sys
+
+import json
+from pipes import quote
+from sys import argv
+
+
+def print_item(item, prefix=''):
+    """Print out dicts as key value pairs or recurse throughout the object hierarchy doing so."""
+    if isinstance(item, dict):
+        for k, v in item.items():
+            prefix_and_key = k if prefix == '' else '{}_{}'.format(prefix, k)
+
+            print_item(v, prefix_and_key)
+        return
+    elif isinstance(item, list):
+        for index, entry in enumerate(item):
+            prefix_and_key = '{}'.format(index) if prefix == '' else '{}_{}'.format(prefix, index)
+
+            print_item(entry, prefix_and_key)
+        return
+    else:
+        printable = str(item)
+
+        if isinstance(item, bool):
+            printable = printable.lower()
+
+    print('{}={}'.format(prefix, quote(printable)))
+
+
+def json2shell(path):
+    """Read the file at path as json and print its root item with `print_item`."""
+    with open(path) as f:
+        d = json.load(f)
+
+        print_item(d)
+
+
+if __name__ == '__main__':
+    if len(argv) != 2:
+        print('Usage: {} <path/to/json>'.format(argv[0]))
+        sys.exit()
+    json2shell(argv[1])
